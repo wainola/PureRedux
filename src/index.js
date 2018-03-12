@@ -5,7 +5,28 @@ const initialState = {
         name:"nicolas",
         age:30,
     },
-    tweets:[]
+    tweets:[
+        {
+            id:1,
+            title:"tweet 1"
+        },
+        {
+            id:2,
+            title:"tweet 2"
+        },
+        {
+            id:3,
+            title:"tweet 3"
+        },
+        {
+            id:4,
+            title:"tweet 4"
+        },
+        {
+            id:5,
+            title:"tweet 5"
+        }
+    ]
 };
 
 // const reducer = (state, action) => {
@@ -32,6 +53,13 @@ const userReducer = (state=initialState.user, action) => {
     return state;
 }
 const tweetReducer = (state=initialState.tweets, action) => {
+    switch(action.type){
+        case "ADD_TWEET":
+            state = state.concat(action.payload);
+            break;
+        case "DELETE_TWEET":
+            state = state.filter((elemento) => elemento.id !== action.payload.id);
+    }
     return state;
 }
 
@@ -50,3 +78,6 @@ store.subscribe(() => {
 store.dispatch({type:"CHANGE_NAME", payload:"Nicolas Riquelme"});
 store.dispatch({type:"CHANGE_AGE", payload:28});
 store.dispatch({type:"CHANGE_NAME", payload:"Camilo Riquelme"});
+store.dispatch({type:"CHANGE_AGE", payload:23});
+store.dispatch({type:"ADD_TWEET", payload:{id:6,title:"tweet 6"}});
+store.dispatch({type:"DELETE_TWEET", payload:{id:3}});
