@@ -1,4 +1,9 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
+import ReducerData from './reducers/reducer-data';
+import App from './components/app';
 
 const initialState = {
     user:{
@@ -63,21 +68,31 @@ const tweetReducer = (state=initialState.tweets, action) => {
     return state;
 }
 
+// CombineReducers can have multiple reducers for data and state
 const reducers = combineReducers({
     user:userReducer,
-    tweets:tweetReducer
-})
-
-const store = createStore(reducers);
-
-console.log(store.getState());
-store.subscribe(() => {
-    console.log("store changed", store.getState());
+    tweets:tweetReducer,
+    data:ReducerData
 });
 
-store.dispatch({type:"CHANGE_NAME", payload:"Nicolas Riquelme"});
-store.dispatch({type:"CHANGE_AGE", payload:28});
-store.dispatch({type:"CHANGE_NAME", payload:"Camilo Riquelme"});
-store.dispatch({type:"CHANGE_AGE", payload:23});
-store.dispatch({type:"ADD_TWEET", payload:{id:6,title:"tweet 6"}});
-store.dispatch({type:"DELETE_TWEET", payload:{id:3}});
+const store = createStore(reducers);
+//const createStoreWithMiddleware = applyMiddleware()(createStore);
+window.store = store; 
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.querySelector('.container')
+);
+
+// console.log(store.getState());
+// store.subscribe(() => {
+//     console.log("store changed", store.getState());
+// });
+
+// store.dispatch({type:"CHANGE_NAME", payload:"Nicolas Riquelme"});
+// store.dispatch({type:"CHANGE_AGE", payload:28});
+// store.dispatch({type:"CHANGE_NAME", payload:"Camilo Riquelme"});
+// store.dispatch({type:"CHANGE_AGE", payload:23});
+// store.dispatch({type:"ADD_TWEET", payload:{id:6,title:"tweet 6"}});
+// store.dispatch({type:"DELETE_TWEET", payload:{id:3}});
